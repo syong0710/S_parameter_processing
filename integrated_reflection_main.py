@@ -13,7 +13,7 @@ def s2smm(sedata, flag_port1to3_2to4_thru):
         # network_se.renumber([0, 1, 2, 3], [new_order_map])
         sedata.renumber([0, 1, 2, 3], [0, 2, 1, 3])  # convert 1->3 and 2->4, to 1->2 and 3->4 
 
-    # before the conversion, make sure that the S-parameters's port order is correct as shown below
+    # before the conversion, make sure that the S-parameters' port order is correct as shown below
     # TX -> RX
     # PORT1 -> PORT2
     # PORT3 -> PORT4
@@ -41,10 +41,7 @@ def s2smm(sedata, flag_port1to3_2to4_thru):
     scd[:,0,1]= 0.5*(sedata.s[:,0,1] - sedata.s[:,0,3] + sedata.s[:,2,1] - sedata.s[:,2,3]) #scd12
     scd[:,1,0]= 0.5*(sedata.s[:,1,0] - sedata.s[:,1,2] + sedata.s[:,3,0] - sedata.s[:,3,2]) #scd21
     scd[:,1,1]= 0.5*(sedata.s[:,1,1] - sedata.s[:,1,3] + sedata.s[:,3,1] - sedata.s[:,3,3]) #scd22
-
     return sdd, scc, sdc, scd
-
-
 
 # Power Weighting Filter
 # A: transmitted peak voltage   
@@ -63,8 +60,6 @@ def weighting_filter(A, fb, tr, f_start, f_stop, f_npoints):
     return w_f, w_1, w_2, w_3, freq
 
 
-
-
 #*********** Main ***********#
 # load data using the given SNP file
 #sedata = rf.Network('./line1_10in_freq_dep16.s4p')
@@ -79,7 +74,7 @@ sedata.plot_s_db(m=3, n=0)
 plt.show()
 
 # modal conversion of the S-parameter
-# before the conversion, make sure that the S-parameters's port order
+# before the conversion, make sure that the S-parameters' port order
 # TX -> RX
 # PORT1 -> PORT2
 # PORT3 -> PORT4
@@ -104,7 +99,6 @@ plt.grid(True)
 plt.legend()
 plt.show()
 
-
 # Power Weighting Filter
 A = 1 # transmitted peak voltage
 fb = 32*1e9 #baudrate
@@ -123,16 +117,12 @@ plt.title("Power Weighting Filter/Components")
 plt.grid(True)
 plt.legend()
 plt.show()
-'''
-'''
 
-# Retrun loss after the weighting filter
+# Return loss after the weighting filter
 rl_wf = (w_f * (sdd11**2))**0.5
-
 rl_wf_integ = sum(rl_wf) * (1/len(rl_wf))
 rl_wf_integ_db = 20*np.log10(np.abs(rl_wf_integ))
 print('integrated return loss  = ' + str(round(rl_wf_integ_db,2)) + "dB")
-
 plt.plot(freq/1e9, 20*np.log10(sdd11), label="SDD11", color='green')
 plt.plot(freq/1e9, 20*np.log10(rl_wf), label="SDD11_after_WF", color='red', linestyle='dashed')
 plt.title('SDD')
@@ -141,8 +131,3 @@ plt.ylabel("[dB]")
 plt.grid(True)
 plt.legend()
 plt.show()
-
-
-
-
-
